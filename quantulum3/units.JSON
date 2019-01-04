@@ -1,0 +1,34 @@
+[ 
+ {
+    "name": "siemens",
+    "surfaces": [
+      "siemens",
+      "mho"
+    ],
+    "entity": "electrical conductance",
+    "URI": "Siemens_(unit)",
+    "dimensions": [],
+    "symbols": [
+      "S"
+    ]
+ },
+ {
+    "name": "ohm",
+    "surfaces": [
+      "ohm"
+    ],
+    "entity": "electrical resistance",
+    "URI": "Ohm",
+    "dimensions": [],
+    "symbols": [
+      "Ω",
+      "Ω"
+    ],
+    "prefixes": [
+      "m",
+      "k",
+      "M",
+      "G"
+    ]
+ }
+] 
