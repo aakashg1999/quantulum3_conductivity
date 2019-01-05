@@ -60,10 +60,9 @@ TEXT_PATTERN = r'''            # Pattern for extracting mixed digit-spelled num
                                       # number
 '''
 
-RANGES = {'to', 'and'}
+RANGES = {'to', 'and',  'to about' }
 UNCERTAINTIES = {'plus minus'}
 
 POWERS = {'squared': 2, 'cubed': 3}
-EXPONENTS_REGEX = (
-    r'(?:(?:\^?\-?[0-9{{superscripts}}]+)?(?:\ (?:{powers}))?)'.format(
-        powers='|'.join(POWERS.keys())))
+EXPONENTS_REGEX = (r'(?:(?:\^?\-?[0-9{{superscripts}}]+)?(?:\ (?:{powers}))?)'
+                   .format(powers='|'.join(POWERS.keys())))
