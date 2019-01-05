@@ -17,7 +17,11 @@ from . import regex as reg
 from . import classes as cls
 from . import disambiguate as dis
 from . import language
+from . import range_moded
 
+#modified variables
+rrr=[]
+k=-998.998
 
 def _get_parser(lang='en_US'):
     """
@@ -101,8 +105,14 @@ def get_values(item, lang='en_US'):
         if values[1] < values[0]:
             raise ValueError(
                 "Invalid range, with second item being smaller than the first "
-                "item")
-        mean = sum(values) / len(values)
+                "item"
+            )
+        '''Modding is done here'''       
+
+        range_moded.arranging(values[0],values[1])
+        rrr=[]
+        mean = k
+
         uncertainty = mean - min(values)
         values = [mean]
     elif uncer_separator:
@@ -207,6 +217,7 @@ def get_unit_from_dimensions(dimensions, text, lang='en_US'):
 
     # Carry on original composition
     unit.original_dimensions = dimensions
+
     return unit
 
 
@@ -286,8 +297,8 @@ def get_unit(item, text, lang='en_US'):
             # Enforce consistency among multiplication and division operators
             # Single exceptions are colloquial number abbreviations (5k miles)
             if operator in reg.multiplication_operators(lang) or (
-                    operator is None and unit
-                    and not (index == 1 and unit in reg.suffixes(lang))):
+                    operator is None and unit and
+                    not (index == 1 and unit in reg.suffixes(lang))):
                 if multiplication_operator != operator and not (
                         index == 1 and str(operator).isspace()):
                     if multiplication_operator is False:
@@ -307,7 +318,8 @@ def get_unit(item, text, lang='en_US'):
                             operator_index)
                         logging.debug(
                             "Because operator inconsistency, cut from "
-                            "operator: '{}', new surface: {}".format(
+                            "operator: '{}', new surface: {}"
+                            .format(
                                 operator, text[item.start():item.end() -
                                                unit_shortening]))
                         break
@@ -331,6 +343,7 @@ def get_unit(item, text, lang='en_US'):
 
     logging.debug('\tUnit: %s', unit)
     logging.debug('\tEntity: %s', unit.entity)
+    # rrr.append(unit)
 
     return unit, unit_shortening
 
@@ -388,13 +401,15 @@ def build_quantity(orig_text,
                    surface,
                    span,
                    uncert,
-                   lang='en_US'):
+                   k,
+                   lang='en_US'
+                   ):
     """
     Build a Quantity object out of extracted information.
     Takes care of caveats and common errors
     """
     return _get_parser(lang).build_quantity(orig_text, text, item, values,
-                                            unit, surface, span, uncert)
+                                            unit, surface, span, uncert,k)
 
 
 ###############################################################################
@@ -449,17 +464,20 @@ def parse(text, lang='en_US', verbose=False):
             uncert, values = get_values(item, lang)
 
             unit, unit_shortening = get_unit(item, text)
+            
             surface, span = get_surface(shifts, orig_text, item, text,
                                         unit_shortening)
             objs = build_quantity(orig_text, text, item, values, unit, surface,
-                                  span, uncert, lang)
+                                  span, uncert,k, lang)
             if objs is not None:
                 quantities += objs
+  
         except ValueError as err:
             logging.debug('Could not parse quantity: %s', err)
 
     if verbose:  # pragma: no cover
         root.level = level
+    
 
     return quantities
 
@@ -518,3 +536,4 @@ def inline_parse_and_expand(text, lang='en_US', verbose=False):
         shift += len(to_add) - (quantity.span[1] - quantity.span[0])
 
     return text
+

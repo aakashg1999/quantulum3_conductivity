@@ -53,7 +53,7 @@ def exponents_regex(lang='en_US'):
     return _get_regex(lang).EXPONENTS_REGEX
 
 
-@cached
+
 def ranges(lang="en_US"):
     ranges_ = {'-'}
     ranges_.update(_get_regex(lang).RANGES)
