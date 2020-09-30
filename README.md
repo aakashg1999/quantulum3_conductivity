@@ -26,7 +26,7 @@ Quantulum would still work without it, but it wouldn\'t be able to
 disambiguate between units with the same name (e.g. *pound* as currency
 or as unit of mass).
 
-Then,
+Then ,
 
 ```bash
 $ pip install quantulum3
